@@ -142,7 +142,7 @@ void bluetoothRead(int Val) {
     motorStop();
   }
   else if (Val == 'a') {
-    if (prevblueVal = 's') {
+    if (prevblueVal === 's') {
       motormove(0, 0, 6, 9, 0);
       Val = 's';
     }
@@ -152,7 +152,7 @@ void bluetoothRead(int Val) {
   }
   else if (Val == 'd') {
 
-    if (prevblueVal = 's') {
+    if (prevblueVal == 's') {
       motormove(0, 0, 6, 9, 0);
       Val = 's';
     }
