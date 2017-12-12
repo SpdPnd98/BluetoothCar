@@ -1,0 +1,127 @@
+
+int RmotorspdPin = 6;   // right motor speed Pin
+int Rmotor1dirAPin = 8; // right motor direction Pin A,
+int Rmotor1dirBPin = 7; // right motor derection Pin B
+// forward: motordir on Pin A is active high
+
+
+int LmotorspdPin = 11;   // left motor speed Pin
+int Lmotor1dirAPin = 12; // left motor direction Pin A
+int Lmotor1dirBPin = 13; // left motor derection Pin B
+// forward: motordir on Pin A is active high
+
+int mySpeed[] = {1, 2, 3};
+
+int IRsensePin = 0; // analog pin 0 (A0)
+int IRsenseVal; // Value of IR sensor
+
+float speedfactor = 25.5; // on a scale of 0 - 10
+int timefactor = 800; // 1 unit of time = 0.8s
+
+char bluetoothVal; // stores bluetooth Value
+
+
+int LEDpin_Y = 5;
+int LEDpin_R = 9;
+int LEDpin_B = 4;
+
+int buzzer = 3;
+
+void setup() {
+
+  pinMode(RmotorspdPin, OUTPUT);
+  pinMode(Rmotor1dirAPin, OUTPUT);
+  pinMode(Rmotor1dirBPin, OUTPUT);
+
+  pinMode(LmotorspdPin, OUTPUT);
+  pinMode(Lmotor1dirAPin, OUTPUT);
+  pinMode(Lmotor1dirBPin, OUTPUT);
+
+  pinMode(IRsensePin, INPUT);
+
+  pinMode(LEDpin_R, OUTPUT);
+  pinMode(LEDpin_B, OUTPUT);
+  pinMode(LEDpin_Y, OUTPUT);
+
+  pinMode(buzzer, OUTPUT);
+
+  //Rmotor(1,0,255);
+  //Lmotor(1,0,255);
+  //motormove(1, 1, 9, 9, 4);
+  Serial.begin(9600);
+}
+
+void loop() {
+ //Rmotor(1, 0, 1);
+ //Lmotor(1, 0, 1); // uncomment thse 2 lines to check each motor individually
+ 
+  motormove(1, 1, 7, 7, 1.5);
+  motormove(1, 0, 7, 7, 0.6); // these 2 lines check if motors are moving fine
+
+
+}
+
+void Rmotor(int A, int B, float spd) {
+
+  digitalWrite(Rmotor1dirAPin, A);
+  digitalWrite(Rmotor1dirBPin, B);
+  analogWrite(RmotorspdPin, spd * speedfactor);
+  delay(500);
+  digitalWrite(Rmotor1dirAPin, LOW);
+  digitalWrite(Rmotor1dirBPin, LOW);
+}
+
+void Lmotor(int A, int B, float spd) {
+
+  digitalWrite(Lmotor1dirAPin, A);
+  digitalWrite(Lmotor1dirBPin, B);
+  analogWrite(LmotorspdPin, spd * speedfactor);
+  delay(500);
+  digitalWrite(Lmotor1dirAPin, LOW);
+  digitalWrite(Lmotor1dirBPin, LOW);
+}
+
+void motormove(int RA, int LA, float Lspd, float Rspd, float dur) {
+
+  int RB; int LB;
+
+
+  if (RA == 1) {
+    RB = 0;
+  }
+  else {
+    RB = 1;
+  }
+
+  if (LA == 1) {
+    LB = 0;
+  }
+  else {
+    LB = 1;
+  }
+  digitalWrite(Rmotor1dirAPin, RA); //configure Right motor
+  digitalWrite(Rmotor1dirBPin, RB);
+  analogWrite(RmotorspdPin, Rspd * speedfactor);
+
+  digitalWrite(Lmotor1dirAPin, LA);  //configure Left motor
+  digitalWrite(Lmotor1dirBPin, LB);
+  analogWrite(LmotorspdPin, Lspd * speedfactor);
+
+  if (dur != 0) {
+    delay(dur * timefactor);//action until a certain amount of time (0 if not needed)
+    motorStop();
+  } 
+
+}
+
+void motorStop() {
+
+
+  digitalWrite(Rmotor1dirAPin, LOW); //Stop all motors
+  digitalWrite(Rmotor1dirBPin, LOW);
+  digitalWrite(Lmotor1dirAPin, LOW);
+  digitalWrite(Lmotor1dirBPin, LOW);
+
+}
+
+
