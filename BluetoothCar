@@ -16,7 +16,8 @@ int IRsenseVal; // Value of IR sensor
 float speedfactor = 25.5; // on a scale of 0 - 10
 int timefactor = 800; // 1 unit of time = 0.8s
 
-char bluetoothVal; // stores bluetooth Value
+char bluetoothVal = 'j'; // stores bluetooth Value, initialize as stop
+char prevblueVal = 'j'; // stores previous bluetooth state, initialize as stop
 
 
 //int LEDpin_Y = 5;
@@ -125,47 +126,53 @@ void bluetoothSense() {
   bluetoothRead(bluetoothVal);
 }
 
-void bluetoothRead(int Val) {
-  char prevblueVal;
+void bluetoothRead(char Val) {
+  
+  //char buff;
   if (Val == 'w') {
-    /*digitalWrite(LED_BUILTIN,HIGH);
-      delay(1000);
-      digitalWrite(LED_BUILTIN,LOW);
-      delay(1000);*/
     motormove(1, 1, 9, 9, 0);
-    //motormove(1, 0, 9, 9, 1.01);
+    prevblueVal = 'w';
 
   }
 
   else if (Val == 'j') {
     //digitalWrite(LED_BUILTIN,LOW);
-    motorStop();
+    motormove(1, 1, 0, 0, 0);
+    prevblueVal = 'j';
   }
+
+  else if (Val == 's') {
+    motormove(0, 0, 9, 9, 0);
+    prevblueVal = 's';
+  }
+
   else if (Val == 'a') {
-    if (prevblueVal === 's') {
-      motormove(0, 0, 6, 9, 0);
-      Val = 's';
+    if (prevblueVal == 's') {
+      motormove(0, 0, 4, 9, 0);
+      prevblueVal = 's';
     }
-    else {
-      motormove(1, 1, 6, 9, 0);
+    else if (prevblueVal == 'w') {
+      motormove(1, 1, 4, 9, 0);
+      prevblueVal = 'w';
     }
+   /* else {
+      motormove(1, 1, 4, 9, 0);
+    }*/
   }
   else if (Val == 'd') {
 
     if (prevblueVal == 's') {
-      motormove(0, 0, 6, 9, 0);
-      Val = 's';
+      motormove(0, 0, 9, 4, 0);
+      prevblueVal = 's';
     }
-    else {
-      motormove(1, 1, 9, 6, 0);
+    else if (prevblueVal == 'w') {
+      motormove(1, 1, 9, 4, 0);
+      prevblueVal = 'w';
     }
-
+     /*else {
+      motormove(1, 1, 9, 4, 0);
+    }*/
   }
-  else if (Val == 's') {
-    motormove(0, 0, 9, 9, 0);
-  }
-  prevblueVal = Val;
-}
 
 void LEDblink(int LEDpin) {
   digitalWrite(LEDpin, HIGH);
